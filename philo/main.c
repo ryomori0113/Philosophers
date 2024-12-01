@@ -17,15 +17,20 @@ unsigned int	get_ms_time(void)
 void func_think(t_philo philo)
 {
     printf("%u  %u is thinking\n", get_ms_time(), philo.id);
+	//DEAD or ALIVE
 
     if(philo.id % 2 == 0)
     {
         pthread_mutex_lock(philo.right_fork);
+		//DEAD or ALIVE
+		
         pthread_mutex_lock(philo.left_fork);
     }
     else
     {
         pthread_mutex_lock(philo.left_fork);
+		//DEAD or ALIVE
+
         pthread_mutex_lock(philo.right_fork);
     }
     // printf("%d  %d is thinking finished!!!  \n", get_ms_time(), philo.id);
@@ -34,6 +39,7 @@ void func_think(t_philo philo)
 void func_eat(t_philo philo)
 {
     printf("%u  %u is eating\n", get_ms_time(), philo.id);
+	//DEAD or ALIVE
     usleep(300000);//定数
 
     pthread_mutex_unlock(philo.left_fork);
@@ -44,9 +50,11 @@ void func_eat(t_philo philo)
 void func_sleep(t_philo philo)
 {
     printf("%u  %u is sleeping\n", get_ms_time(), philo.id);
+	//DEAD or ALIVE
     usleep(300000);//定数
     // printf("%d  %d is sleeping finished!!! \n", get_ms_time(), philo.id);
 }
+
 
 static void * dine(void *arg)
 {
@@ -58,7 +66,7 @@ static void * dine(void *arg)
     {
         func_think(*philo);
         func_eat(*philo);
-        func_sleep(*philo);
+		func_sleep(*philo);
         i++;
     }
 }

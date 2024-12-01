@@ -11,6 +11,7 @@ typedef struct s_philo
     int     count;
     unsigned int  eat_time;
     unsigned int    sleep_time;    
+    pthread_mutex_t    *dead_or_alive;
 
 } t_philo;
 
