@@ -71,10 +71,14 @@ int    main(void)
    pthread_t   thread_id[5];
    int         i;
    t_philo     philo[5];
-//    pthread_mutex_t fork[5];
    int philo_num = 5;
 	static pthread_mutex_t fork[5] = {PTHREAD_MUTEX_INITIALIZER};//init + dedach
 
+    // pthread_mutex_t forks[5];
+	// for (int i = 0; i < 5; i++)
+	// {
+	// 	pthread_mutex_init(&forks[i], NULL);
+	// }
 
    i = 0;
    while(i < philo_num)
@@ -88,5 +92,20 @@ int    main(void)
        usleep(20000);
        i++;
    }
-   sleep(10);
+
+
+   i = 0;
+    while(i < philo_num)
+   {
+        pthread_join(thread_id[i], NULL);
+       i++;
+   }
+
+
+	// for (int i = 0; i < 5; i++)
+	// {
+	// 	pthread_mutex_destroy(&forks[i]);
+	// }
+
+    return (0);
 }
