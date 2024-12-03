@@ -94,9 +94,9 @@ void *monitor_philosophers(void *arg)
 
                 printf("%u %d died\n", current_time, philo[i].id);
                 pthread_mutex_unlock(&philo[i].meal_mutex);
-                return NULL;
+				exit(EXIT_FAILURE);//引数のphiloが1のときの場合のみ終わるようにする。＞＞＞＞＞＞＞＞直し必要？＜＜＜＜＜＜＜＜
+                // return NULL;↑これをコメントアウトして、exit(EXIT_FAILURE);を追加
             }
-
             pthread_mutex_unlock(&philo[i].meal_mutex);
 			i++;
         }
@@ -146,6 +146,11 @@ int main(int argc, char **argv)
         fprintf(stderr, "Usage: %s [philo_num] [time_to_die] [time_to_eat] [time_to_sleep] [meal_count]\n", argv[0]);
         return 1;
     }
+	if(argv[0] == 0 || argv[1] == 0 || argv[2] == 0 || argv[3] == 0 || argv[4] == 0)
+	{
+		fprintf(stderr, "Error: Invalid argument.\n");
+		exit(EXIT_FAILURE);
+	}
 
     int philo_num = parse_argument(argv[1]);
     unsigned int time_to_die = parse_argument(argv[2]);

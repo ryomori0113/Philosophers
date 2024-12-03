@@ -11,6 +11,8 @@ typedef struct s_shared {
     unsigned int    time_to_sleep;
     bool            simulation_stop;
     pthread_mutex_t stop_mutex;
+    int             finished_philos; // 追加: 終了した哲学者の数
+    pthread_mutex_t finish_mutex;    // 追加: 終了カウント用のミューテックス
 } t_shared;
 
 typedef struct s_philo {
