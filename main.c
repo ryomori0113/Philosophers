@@ -78,6 +78,18 @@ void *monitor_philosophers(void *arg)
     t_philo *philo = (t_philo *)arg;
     t_shared *shared = philo[0].shared;
 
+	if (shared->philo_num == 1)
+    {
+        // time_to_die を超える時間待機
+        usleep((shared->time_to_die + 1) * 1000);
+        
+        // シミュレーション停止
+        pthread_mutex_lock(&shared->stop_mutex);
+        shared->simulation_stop = true;
+        pthread_mutex_unlock(&shared->stop_mutex);
+        
+        return NULL;
+    }
     while (!is_simulation_stopped(shared))
     {
 		i = 0;
@@ -94,12 +106,19 @@ void *monitor_philosophers(void *arg)
 
                 printf("%u %d died\n", current_time, philo[i].id);
                 pthread_mutex_unlock(&philo[i].meal_mutex);
-				exit(EXIT_FAILURE);//引数のphiloが1のときの場合のみ終わるようにする。＞＞＞＞＞＞＞＞直し必要？＜＜＜＜＜＜＜＜
-                // return NULL;↑これをコメントアウトして、exit(EXIT_FAILURE);を追加
+				// exit(EXIT_FAILURE);//引数のphiloが1のときの場合のみ終わるようにする。＞＞＞＞＞＞＞＞直し必要？＜＜＜＜＜＜＜＜
+                return NULL;//↑これをコメントアウトして、exit(EXIT_FAILURE);を追加
             }
             pthread_mutex_unlock(&philo[i].meal_mutex);
 			i++;
         }
+		pthread_mutex_lock(&shared->finish_mutex);
+        if (shared->finished_philos == shared->philo_num)
+        {
+            pthread_mutex_unlock(&shared->finish_mutex);
+            return NULL; // 正常終了
+        }
+        pthread_mutex_unlock(&shared->finish_mutex);
         usleep(1000);
     }
     return NULL;
@@ -109,6 +128,26 @@ void *dine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
+	// 1人の哲学者の場合の特別な処理
+    if (philo->shared->philo_num == 1)
+    {
+        // 片方のフォークのみをロック
+        pthread_mutex_lock(philo->left_fork);
+        printf("%u %d thinking\n", get_ms_time(), philo->id);
+        
+        // time_to_die を超える時間待機
+        usleep((philo->shared->time_to_die + 1) * 1000);
+        
+        // シミュレーション停止と死亡メッセージ
+        pthread_mutex_lock(&philo->shared->stop_mutex);
+        philo->shared->simulation_stop = true;
+        pthread_mutex_unlock(&philo->shared->stop_mutex);
+        
+        printf("%u %d died\n", get_ms_time(), philo->id);
+        
+        pthread_mutex_unlock(philo->left_fork);
+        return NULL;
+    }
     if (philo->id % 2 == 0) {
         usleep(500);
     }
@@ -117,9 +156,24 @@ void *dine(void *arg)
     {
         func_think(philo);
         func_eat(philo);
-        func_sleep(philo);
-        if (philo->count > 0)
+		if (philo->count > 0)
     		philo->count--;
+
+		if (philo->count == 0)
+        {
+            pthread_mutex_lock(&philo->shared->finish_mutex);
+            philo->shared->finished_philos++;
+            if (philo->shared->finished_philos == philo->shared->philo_num)
+            {
+                pthread_mutex_lock(&philo->shared->stop_mutex);
+                philo->shared->simulation_stop = true;
+                pthread_mutex_unlock(&philo->shared->stop_mutex);
+            }
+            pthread_mutex_unlock(&philo->shared->finish_mutex);
+            break;
+        }
+        func_sleep(philo);
+  
     }
     return NULL;
 }
@@ -179,6 +233,8 @@ int main(int argc, char **argv)
     shared_data.time_to_eat = time_to_eat;
     shared_data.time_to_sleep = time_to_sleep;
     shared_data.simulation_stop = false;
+	shared_data.finished_philos = 0;
+	pthread_mutex_init(&shared_data.finish_mutex, NULL);
     pthread_mutex_init(&shared_data.stop_mutex, NULL);
 
 	i = 0;
@@ -223,10 +279,16 @@ int main(int argc, char **argv)
 		i++;
     }
     pthread_mutex_destroy(&shared_data.stop_mutex);
+	pthread_mutex_destroy(&shared_data.finish_mutex);
+
 
     free(threads);
     free(forks);
     free(philo);
 
     return 0;
+}
+__attribute__((destructor))
+static void destructor() {
+	system("leaks -q a.out");
 }
