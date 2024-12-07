@@ -46,6 +46,9 @@ void func_eat(t_philo *philo)
         pthread_mutex_lock(philo->right_fork);
     }
 
+    printf("%u %d is eating\n", get_ms_time(), philo->id);
+    usleep(philo->shared->time_to_eat * 1000);
+	
     if (is_simulation_stopped(philo->shared)) {
         pthread_mutex_unlock(philo->left_fork);
         pthread_mutex_unlock(philo->right_fork);
@@ -55,9 +58,6 @@ void func_eat(t_philo *philo)
     pthread_mutex_lock(&philo->meal_mutex);
     philo->last_meal_time = get_ms_time();
     pthread_mutex_unlock(&philo->meal_mutex);
-
-    printf("%u %d is eating\n", get_ms_time(), philo->id);
-    usleep(philo->shared->time_to_eat * 1000);
 
     pthread_mutex_unlock(philo->left_fork);
     pthread_mutex_unlock(philo->right_fork);
@@ -128,14 +128,14 @@ void *dine(void *arg)
 {
     t_philo *philo = (t_philo *)arg;
 
-	// 1人の哲学者の場合の特別な処理
+	//1人の哲学者の場合
     if (philo->shared->philo_num == 1)
     {
-        // 片方のフォークのみをロック
+        // 片方をロック
         pthread_mutex_lock(philo->left_fork);
         printf("%u %d thinking\n", get_ms_time(), philo->id);
         
-        // time_to_die を超える時間待機
+        // time_to_die 待機
         usleep((philo->shared->time_to_die + 1) * 1000);
         
         // シミュレーション停止と死亡メッセージ
@@ -178,7 +178,7 @@ void *dine(void *arg)
     return NULL;
 }
 
-// コマンドライン引数を検証し、整数に変換する
+// コマンドライン引数を検証し、整数に変換
 int parse_argument(const char *arg)
 {
     int value = atoi(arg);
@@ -255,7 +255,7 @@ int main(int argc, char **argv)
         philo[i].last_meal_time = get_ms_time();
         pthread_mutex_init(&philo[i].meal_mutex, NULL);
         pthread_create(&threads[i], NULL, dine, &philo[i]);
-        usleep(20000);
+        usleep(200);
 		i++;
     }
 
