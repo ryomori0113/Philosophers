@@ -5,21 +5,22 @@
 #include <stdbool.h>
 
 typedef struct s_shared {
-    int             philo_num;
+    unsigned int             philo_num;
     unsigned int    time_to_die;
     unsigned int    time_to_eat;
     unsigned int    time_to_sleep;
+	unsigned int    meal_count;
     bool            simulation_stop;
     pthread_mutex_t stop_mutex;
-    int             finished_philos; // 完了した哲学者の数
+    unsigned int             finished_philos; // 完了した哲学者の数
     pthread_mutex_t finish_mutex;    // 完了カウント用のミューテックス
 } t_shared;
 
 typedef struct s_philo {
-    int             id;
+    unsigned int             id;
     pthread_mutex_t *left_fork;
     pthread_mutex_t *right_fork;
-    int             count;
+    unsigned int             count;
     pthread_mutex_t  meal_mutex;
     unsigned int    last_meal_time;
     t_shared        *shared;
