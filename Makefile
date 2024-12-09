@@ -12,13 +12,14 @@
 
 NAME	= philo
 
-SRCS	= main.c philo_dine.c philo_eating.c philo_sleeping_thinking.c philo_monitor.c reserve_philo.c utils_libft.c utils.c
+SRCS	= main.c philo_dine.c philo_eating.c philo_sleeping_thinking.c \
+			philo_monitor.c reserve_philo.c utils_libft.c utils.c utils2.c
 
 OBJS	= ${SRCS:.c=.o}
 
 CC		= cc
 
-FLAGS	= -Wall -Wextra -Werror
+FLAGS	= -Wall -Wextra -Werror #-fsanitize=thread
 
 RM		= rm -f
 

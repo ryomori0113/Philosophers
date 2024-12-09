@@ -53,23 +53,28 @@ int	args_check(int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 	{
-		ft_putstr_fd("Usage: [philo_num] [time_to_die] \
-				[time_to_eat] [time_to_sleep] [meal_count]\n", 2);
+		ft_putstr_fd("Invalid argument.\n", 2);
 		return (1);
 	}
-	if (argv[0] == 0 || argv[1] == 0 || \
-				argv[2] == 0 || argv[3] == 0 || argv[4] == 0)
-	{
-		ft_putstr_fd("Error: Invalid argument.\n", 2);
-		exit(EXIT_FAILURE);
-	}
+	(void) argv;
 	return (0);
 }
 
 int	parse_argument(const char *arg)
 {
 	int	value;
+	int	i;
 
+	i = 0;
+	while (arg[i])
+	{
+		if (!ft_isdigit(arg[i]))
+		{
+			ft_putstr_fd("Error: Invalid argument\n", 2);
+			exit(EXIT_FAILURE);
+		}
+		i++;
+	}
 	value = ft_atoi(arg);
 	if (value <= 0)
 	{

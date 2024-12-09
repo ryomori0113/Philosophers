@@ -85,5 +85,7 @@ void			*dine(void *arg);//philo_dine.c
 void			dine_philosohers(t_philo *philo);
 void			dine_single_philosophers(t_philo *philo);
 void			clean_up(t_shared *shared_date);//main.c
+int				ft_isdigit(int c);
+int				sharse_memory(t_shared *shared_date);
 
 #endif

@@ -52,7 +52,6 @@ void	philosohers_create(t_shared *shared, t_philo *philo,
 		philo[i].last_meal_time = get_ms_time();
 		pthread_mutex_init(&philo[i].meal_mutex, NULL);
 		pthread_create(&threads[i], NULL, dine, &philo[i]);
-		usleep(200);
 		i++;
 	}
 }
@@ -61,15 +60,8 @@ int	init_resorces(int argc, char **argv, t_shared *shared_date)
 {
 	if (parse_set(argc, argv, shared_date))
 		return (1);
-	shared_date->threads = malloc(sizeof(pthread_t) * shared_date->philo_num);
-	shared_date->forks = malloc(sizeof(pthread_mutex_t) * \
-				shared_date->philo_num);
-	shared_date->philo = malloc(sizeof(t_philo) * shared_date->philo_num);
-	if (!shared_date->threads || !shared_date->forks || !shared_date->philo)
-	{
-		ft_putstr_fd("Error: Memory allocation failed.\n", 2);
+	if (sharse_memory(shared_date))
 		return (1);
-	}
 	pthread_mutex_init(&shared_date->finish_mutex, NULL);
 	pthread_mutex_init(&shared_date->stop_mutex, NULL);
 	return (0);

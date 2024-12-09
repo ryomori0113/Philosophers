@@ -46,7 +46,6 @@ void	dine_philosohers(t_philo *philo)
 				pthread_mutex_unlock(&philo->shared->stop_mutex);
 			}
 			pthread_mutex_unlock(&philo->shared->finish_mutex);
-			break ;
 		}
 		func_sleep(philo);
 	}
