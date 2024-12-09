@@ -57,17 +57,17 @@ void	philosohers_create(t_shared *shared, t_philo *philo,
 	}
 }
 
-int	init_resorces(int argc, char **argv, t_shared *shared_date,
-		pthread_t **threads, pthread_mutex_t **forks, t_philo **philo)
+int	init_resorces(int argc, char **argv, t_shared *shared_date)
 {
 	if (parse_set(argc, argv, shared_date))
 		return (1);
-	*threads = malloc(sizeof(pthread_t) * shared_date->philo_num);
-	*forks = malloc(sizeof(pthread_mutex_t) * shared_date->philo_num);
-	*philo = malloc(sizeof(t_philo) * shared_date->philo_num);
-	if (!threads || !forks || !philo)
+	shared_date->threads = malloc(sizeof(pthread_t) * shared_date->philo_num);
+	shared_date->forks = malloc(sizeof(pthread_mutex_t) * \
+				shared_date->philo_num);
+	shared_date->philo = malloc(sizeof(t_philo) * shared_date->philo_num);
+	if (!shared_date->threads || !shared_date->forks || !shared_date->philo)
 	{
-		fprintf(stderr, "Error: Memory allocation failed.\n");
+		ft_putstr_fd("Error: Memory allocation failed.\n", 2);
 		return (1);
 	}
 	pthread_mutex_init(&shared_date->finish_mutex, NULL);
@@ -75,18 +75,17 @@ int	init_resorces(int argc, char **argv, t_shared *shared_date,
 	return (0);
 }
 
-void	run_philosophers(t_shared *shared, t_philo *philo,
-			pthread_t *threads, pthread_mutex_t *forks)
+void	run_philosophers(t_shared *shared)
 {
 	pthread_t		monitor_thread;
 	unsigned int	i;
 
-	philosohers_create(shared, philo, threads, forks);
-	pthread_create(&monitor_thread, NULL, monitor_philosophers, philo);
+	philosohers_create(shared, shared->philo, shared->threads, shared->forks);
+	pthread_create(&monitor_thread, NULL, monitor_philosophers, shared->philo);
 	i = 0;
 	while (i < shared->philo_num)
 	{
-		pthread_join(threads[i], NULL);
+		pthread_join(shared->threads[i], NULL);
 		i++;
 	}
 	pthread_join(monitor_thread, NULL);

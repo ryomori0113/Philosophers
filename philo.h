@@ -35,7 +35,9 @@ typedef struct s_shared
 	pthread_mutex_t	stop_mutex;
 	unsigned int	finished_philos;
 	pthread_mutex_t	finish_mutex;
-	
+	pthread_t		*threads;
+	pthread_mutex_t	*forks;
+	t_philo			*philo;
 }	t_shared;
 
 typedef struct s_philo
@@ -67,11 +69,8 @@ long long int	ft_atoi(const char *str);// utils_ft_atoi.c
 int				parse_set(int argc, char **argv, t_shared *shared);
 void			philosohers_create(t_shared *shared, t_philo *philo,
 					pthread_t *threads, pthread_mutex_t *forks);
-int				init_resorces(int argc, char **argv, t_shared *shared_date,
-					pthread_t **threads, pthread_mutex_t **forks,
-					t_philo **philo);
-void			run_philosophers(t_shared *shared, t_philo *philo,
-					pthread_t *threads, pthread_mutex_t *forks);//reserve_p
+int				init_resorces(int argc, char **argv, t_shared *shared_date);
+void			run_philosophers(t_shared *shared);//reserve_p
 void			func_sleep(t_philo *philo);//philo_sleeping_thinking.c
 void			func_think(t_philo *philo);
 void			*monitor_philosophers(void *arg);//philo_moniter.c
@@ -85,7 +84,6 @@ void			unlock_forks(t_philo *philo);
 void			*dine(void *arg);//philo_dine.c
 void			dine_philosohers(t_philo *philo);
 void			dine_single_philosophers(t_philo *philo);
-void			clean_up(t_shared *shared_date, t_philo *philo,
-					pthread_t *threads, pthread_mutex_t *forks);//main.c
+void			clean_up(t_shared *shared_date);//main.c
 
 #endif
