@@ -26,52 +26,55 @@ bool	check_philosophers_dide(t_philo *philo, t_shared *shared, int i)
 
 	pthread_mutex_lock(&philo[i].meal_mutex);
 	current_time = get_ms_time();
-	if(current_time - philo[i].last_meal_time > shared->time_to_die)
+	if (current_time - philo[i].last_meal_time > shared->time_to_die)
 	{
 		pthread_mutex_lock(&shared->stop_mutex);
 		shared->simulation_stop = true;
 		pthread_mutex_unlock(&shared->stop_mutex);
-
 		printf("%u %d died\n", get_ms_time(), philo[i].id);
 		pthread_mutex_unlock(&philo[i].meal_mutex);
-		return true;
+		return (true);
 	}
 	pthread_mutex_unlock(&philo[i].meal_mutex);
-	return false;
+	return (false);
 }
 
 void	monitor_philo(t_philo *philo, t_shared *shared)
 {
 	unsigned int	i;
-	while(!is_simulation_stopped(shared))
+
+	while (!is_simulation_stopped(shared))
 	{
 		i = 0;
-		while(i < shared->philo_num)
+		while (i < shared->philo_num)
 		{
-			if(check_philosophers_dide(philo, shared, i))
-				return;
+			if (check_philosophers_dide(philo, shared, i))
+				return ;
 			i++;
 		}
 		pthread_mutex_lock(&shared->finish_mutex);
 		if (shared->finished_philos == shared->philo_num)
 		{
 			pthread_mutex_unlock(&shared->stop_mutex);
-			return;
+			return ;
 		}
 		pthread_mutex_unlock(&shared->finish_mutex);
 		usleep(1000);
 	}
 }
+
 void	*monitor_philosophers(void *arg)
 {
-	t_philo	*philo = (t_philo *)arg;
-	t_shared	*shared = philo[0].shared;
+	t_philo		*philo;
+	t_shared	*shared;
 
+	philo = (t_philo *)arg;
+	shared = philo[0].shared;
 	if (shared->philo_num == 1)
 	{
 		moniter_single_philosophers(shared);
-		return NULL;
+		return (NULL);
 	}
 	monitor_philo(philo, shared);
-	return NULL;
+	return (NULL);
 }

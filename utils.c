@@ -39,28 +39,31 @@ void	ft_putstr_fd(char *s, int fd)
 	}
 }
 
-bool is_simulation_stopped(t_shared *shared)
+bool	is_simulation_stopped(t_shared *shared)
 {
-	bool stopped;
+	bool	stopped;
+
 	pthread_mutex_lock(&shared->stop_mutex);
 	stopped = shared->simulation_stop;
 	pthread_mutex_unlock(&shared->stop_mutex);
-	return stopped;
+	return (stopped);
 }
 
 int	args_check(int argc, char **argv)
 {
 	if (argc != 5 && argc != 6)
 	{
-		ft_putstr_fd("Usage: [philo_num] [time_to_die] [time_to_eat] [time_to_sleep] [meal_count]\n", 2);
-		return 1;
+		ft_putstr_fd("Usage: [philo_num] [time_to_die] \
+				[time_to_eat] [time_to_sleep] [meal_count]\n", 2);
+		return (1);
 	}
-	if(argv[0] == 0 || argv[1] == 0 || argv[2] == 0 || argv[3] == 0 || argv[4] == 0)
+	if (argv[0] == 0 || argv[1] == 0 || \
+				argv[2] == 0 || argv[3] == 0 || argv[4] == 0)
 	{
 		ft_putstr_fd("Error: Invalid argument.\n", 2);
 		exit(EXIT_FAILURE);
 	}
-	return 0;
+	return (0);
 }
 
 int	parse_argument(const char *arg)
@@ -68,7 +71,7 @@ int	parse_argument(const char *arg)
 	int	value;
 
 	value = ft_atoi(arg);
-	if(value <= 0)
+	if (value <= 0)
 	{
 		ft_putstr_fd("Error: Invalid argument.\n", 2);
 		exit(EXIT_FAILURE);

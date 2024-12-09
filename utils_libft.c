@@ -29,11 +29,11 @@ static int	ft_skipspace(int c)
 	return (0);
 }
 
-static long long int max_atoi(const char *str)
+static long long int	max_atoi(const char *str)
 {
 	long long int	result;
 	long long int	l_divis;
-	char		l_remain;
+	char			l_remain;
 
 	result = 0;
 	l_divis = LONG_MAX / 10;
@@ -52,7 +52,7 @@ static long long int	min_atoi(const char *str)
 {
 	long long int	result;
 	long long int	l_divis;
-	char		l_remain;
+	char			l_remain;
 
 	result = 0;
 	l_divis = LONG_MIN / 10;
@@ -69,8 +69,8 @@ static long long int	min_atoi(const char *str)
 
 long long int	ft_atoi(const char *str)
 {
-	int		i;
-	int		flag;
+	int				i;
+	int				flag;
 	long long int	nbr;
 
 	i = 0;

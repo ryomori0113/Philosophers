@@ -28,7 +28,8 @@ void	dine_philosohers(t_philo *philo)
 {
 	if (philo->id % 2 == 0)
 		usleep(500);
-	while(!is_simulation_stopped(philo->shared) && ((int)philo->count == -1 || philo->count > 0))
+	while (!is_simulation_stopped(philo->shared) && \
+			((int)philo->count == -1 || philo->count > 0))
 	{
 		func_think(philo);
 		func_eat(philo);
@@ -45,7 +46,7 @@ void	dine_philosohers(t_philo *philo)
 				pthread_mutex_unlock(&philo->shared->stop_mutex);
 			}
 			pthread_mutex_unlock(&philo->shared->finish_mutex);
-			break;
+			break ;
 		}
 		func_sleep(philo);
 	}
@@ -53,13 +54,14 @@ void	dine_philosohers(t_philo *philo)
 
 void	*dine(void *arg)
 {
-	t_philo	*philo = (t_philo *)arg;
+	t_philo	*philo;
 
+	philo = (t_philo *)arg;
 	if (philo->shared->philo_num == 1)
 	{
 		dine_single_philosophers(philo);
-		return NULL;
+		return (NULL);
 	}
 	dine_philosohers(philo);
-	return NULL;
+	return (NULL);
 }

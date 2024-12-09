@@ -13,13 +13,16 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-#include <pthread.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <stdbool.h>
-#include <stdlib.h>
-#include <limits.h>
+# include <pthread.h>
+# include <stdio.h>
+# include <unistd.h>
+# include <sys/time.h>
+# include <stdbool.h>
+# include <stdlib.h>
+# include <limits.h>
+
+typedef struct s_philo	t_philo;
+typedef struct s_shared	t_shared;
 
 typedef struct s_shared
 {
@@ -30,9 +33,10 @@ typedef struct s_shared
 	unsigned int	meal_count;
 	bool			simulation_stop;
 	pthread_mutex_t	stop_mutex;
-	unsigned int	finished_philos; // 完了した哲学者の数
-	pthread_mutex_t	finish_mutex;    // 完了カウント用のミューテックス
-} t_shared;
+	unsigned int	finished_philos;
+	pthread_mutex_t	finish_mutex;
+	
+}	t_shared;
 
 typedef struct s_philo
 {
@@ -44,7 +48,7 @@ typedef struct s_philo
 	unsigned int	last_meal_time;
 	t_shared		*shared;
 	pthread_t		thread;
-} t_philo;
+}	t_philo;
 
 // プロトタイプ宣言
 unsigned int	get_ms_time(void);
@@ -61,14 +65,19 @@ int				args_check(int argc, char **argv);
 int				parse_argument(const char *arg);
 long long int	ft_atoi(const char *str);// utils_ft_atoi.c
 int				parse_set(int argc, char **argv, t_shared *shared);
-void			philosohers_create(t_shared *shared, t_philo *philo, pthread_t *threads, pthread_mutex_t *forks);
-int				init_resorces(int argc, char **argv, t_shared *shared_date, pthread_t **threads, pthread_mutex_t **forks, t_philo **philo);
-void			run_philosophers(t_shared *shared, t_philo *philo, pthread_t *threads, pthread_mutex_t *forks);//reserve_philo.c
+void			philosohers_create(t_shared *shared, t_philo *philo,
+					pthread_t *threads, pthread_mutex_t *forks);
+int				init_resorces(int argc, char **argv, t_shared *shared_date,
+					pthread_t **threads, pthread_mutex_t **forks,
+					t_philo **philo);
+void			run_philosophers(t_shared *shared, t_philo *philo,
+					pthread_t *threads, pthread_mutex_t *forks);//reserve_p
 void			func_sleep(t_philo *philo);//philo_sleeping_thinking.c
 void			func_think(t_philo *philo);
 void			*monitor_philosophers(void *arg);//philo_moniter.c
 void			monitor_philo(t_philo *philo, t_shared *shared);
-bool			check_philosophers_dide(t_philo *philo, t_shared *shared, int i);
+bool			check_philosophers_dide(t_philo *philo,
+					t_shared *shared, int i);
 void			moniter_single_philosophers(t_shared *shared);
 void			func_eat(t_philo *philo);//philo_eating.c
 bool			lock_forks(t_philo *philo);
@@ -76,6 +85,7 @@ void			unlock_forks(t_philo *philo);
 void			*dine(void *arg);//philo_dine.c
 void			dine_philosohers(t_philo *philo);
 void			dine_single_philosophers(t_philo *philo);
-void			clean_up(t_shared *shared_date, t_philo *philo, pthread_t *threads, pthread_mutex_t *forks);//main.c
+void			clean_up(t_shared *shared_date, t_philo *philo,
+					pthread_t *threads, pthread_mutex_t *forks);//main.c
 
 #endif

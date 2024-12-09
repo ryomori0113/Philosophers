@@ -26,7 +26,7 @@ bool	lock_forks(t_philo *philo)
 		if (is_simulation_stopped(philo->shared))
 		{
 			pthread_mutex_unlock(philo->right_fork);
-			return false;
+			return (false);
 		}
 		pthread_mutex_lock(philo->left_fork);
 	}
@@ -36,26 +36,26 @@ bool	lock_forks(t_philo *philo)
 		if (is_simulation_stopped(philo->shared))
 		{
 			pthread_mutex_unlock(philo->left_fork);
-			return false;
+			return (false);
 		}
 		pthread_mutex_lock(philo->right_fork);
 	}
-	return true;
+	return (true);
 }
+
 void	func_eat(t_philo *philo)
 {
 	if (is_simulation_stopped(philo->shared))
-		return;
+		return ;
 	if (!lock_forks(philo))
-		return;
-	if(is_simulation_stopped(philo->shared))
+		return ;
+	if (is_simulation_stopped(philo->shared))
 	{
 		unlock_forks(philo);
-		return;
+		return ;
 	}
 	printf("%u %d is eating\n", get_ms_time(), philo->id);
 	usleep (philo->shared->time_to_eat * 1000);
-
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = get_ms_time();
 	pthread_mutex_unlock(&philo->meal_mutex);

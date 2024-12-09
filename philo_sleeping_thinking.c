@@ -12,19 +12,18 @@
 
 #include "philo.h"
 
-void func_think(t_philo *philo)
+void	func_think(t_philo *philo)
 {
 	if (is_simulation_stopped(philo->shared))
-		return;
+		return ;
 	printf("%u %d is thinking\n", get_ms_time(), philo->id);
 	usleep(100);
 }
 
-void func_sleep(t_philo *philo)
+void	func_sleep(t_philo *philo)
 {
-    if (is_simulation_stopped(philo->shared))
-        return;
-
-    printf("%u %d is sleeping\n", get_ms_time(), philo->id);
-    usleep(philo->shared->time_to_sleep * 1000);
+	if (is_simulation_stopped(philo->shared))
+		return ;
+	printf("%u %d is sleeping\n", get_ms_time(), philo->id);
+	usleep(philo->shared->time_to_sleep * 1000);
 }

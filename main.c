@@ -12,12 +12,13 @@
 
 #include "philo.h"
 
-void	clean_up(t_shared *shared_date, t_philo *philo, pthread_t *threads, pthread_mutex_t *forks)
+void	clean_up(t_shared *shared_date, t_philo *philo,
+			pthread_t *threads, pthread_mutex_t *forks)
 {
 	unsigned int	i;
 
 	i = 0;
-	while(i < shared_date->philo_num)
+	while (i < shared_date->philo_num)
 	{
 		pthread_mutex_destroy(&forks[i]);
 		pthread_mutex_destroy(&philo[i].meal_mutex);
@@ -30,17 +31,16 @@ void	clean_up(t_shared *shared_date, t_philo *philo, pthread_t *threads, pthread
 	free(philo);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-	t_shared	shared_date;
-	pthread_t	*threads;
+	t_shared		shared_date;
+	pthread_t		*threads;
 	pthread_mutex_t	*forks;
-	t_philo	*philo;
-	
-	if(init_resorces(argc, argv, &shared_date, &threads, &forks, &philo))
-		return 1;
+	t_philo			*philo;
 
+	if (init_resorces(argc, argv, &shared_date, &threads, &forks, &philo))
+		return (1);
 	run_philosophers(&shared_date, philo, threads, forks);
 	clean_up(&shared_date, philo, threads, forks);
-	return 0;
+	return (0);
 }
