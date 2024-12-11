@@ -23,26 +23,26 @@ bool	lock_forks(t_philo *philo)
 	if (philo->id % 2 == 0)
 	{
 		pthread_mutex_lock(philo->right_fork);
-		printf("%u %d is thinking\n", get_ms_time(), philo->id);
+		printf("%u %d has taken a fork\n", get_ms_time(), philo->id);
 		if (is_simulation_stopped(philo->shared))
 		{
 			pthread_mutex_unlock(philo->right_fork);
 			return (false);
 		}
 		pthread_mutex_lock(philo->left_fork);
-		printf("%u %d is thinking\n", get_ms_time(), philo->id);
+		printf("%u %d is has taken a fork\n", get_ms_time(), philo->id);
 	}
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		printf("%u %d is thinking\n", get_ms_time(), philo->id);
+		printf("%u %d ihas taken a fork\n", get_ms_time(), philo->id);
 		if (is_simulation_stopped(philo->shared))
 		{
 			pthread_mutex_unlock(philo->left_fork);
 			return (false);
 		}
 		pthread_mutex_lock(philo->right_fork);
-		printf("%u %d is thinking\n", get_ms_time(), philo->id);
+		printf("%u %d has taken a fork\n", get_ms_time(), philo->id);
 	}
 	return (true);
 }
