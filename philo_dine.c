@@ -16,7 +16,7 @@ void	dine_single_philosophers(t_philo *philo)
 {
 	pthread_mutex_lock(philo->left_fork);
 	printf("%u %d thinking\n", get_ms_time(), philo->id);
-	usleep((philo->shared->time_to_die + 1) * 1000);
+	ft_usleep(philo->shared->time_to_die + 1);
 	pthread_mutex_lock(&philo->shared->stop_mutex);
 	philo->shared->simulation_stop = true;
 	pthread_mutex_unlock(&philo->shared->stop_mutex);

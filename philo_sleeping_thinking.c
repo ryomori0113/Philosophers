@@ -25,5 +25,5 @@ void	func_sleep(t_philo *philo)
 	if (is_simulation_stopped(philo->shared))
 		return ;
 	printf("%u %d is sleeping\n", get_ms_time(), philo->id);
-	usleep(philo->shared->time_to_sleep * 1000);
+	ft_usleep(philo->shared->time_to_sleep);
 }

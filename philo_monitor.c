@@ -14,7 +14,7 @@
 
 void	moniter_single_philosophers(t_shared *shared)
 {
-	usleep((shared->time_to_die + 1) * 1000);
+	ft_usleep(shared->time_to_die + 1);
 	pthread_mutex_lock(&shared->stop_mutex);
 	shared->simulation_stop = true;
 	pthread_mutex_unlock(&shared->stop_mutex);

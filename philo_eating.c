@@ -59,7 +59,7 @@ void	func_eat(t_philo *philo)
 		return ;
 	}
 	printf("%u %d is eating\n", get_ms_time(), philo->id);
-	usleep (philo->shared->time_to_eat * 1000);
+	ft_usleep (philo->shared->time_to_eat);
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal_time = get_ms_time();
 	pthread_mutex_unlock(&philo->meal_mutex);

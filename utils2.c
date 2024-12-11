@@ -38,3 +38,18 @@ int	sharse_memory(t_shared *shared_date)
 	}
 	return (0);
 }
+
+void	ft_usleep(unsigned int ms)
+{
+	unsigned int	start_ms;
+	unsigned int	now_ms;
+
+	start_ms = get_ms_time();
+	while (1)
+	{
+		now_ms = get_ms_time();
+		if (ms <= now_ms - start_ms)
+			break ;
+		usleep(10);
+	}
+}
