@@ -35,7 +35,7 @@ bool	lock_forks(t_philo *philo)
 	else
 	{
 		pthread_mutex_lock(philo->left_fork);
-		printf("%u %d ihas taken a fork\n", get_ms_time(), philo->id);
+		printf("%u %d has taken a fork\n", get_ms_time(), philo->id);
 		if (is_simulation_stopped(philo->shared))
 		{
 			pthread_mutex_unlock(philo->left_fork);
